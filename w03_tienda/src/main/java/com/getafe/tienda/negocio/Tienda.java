@@ -2,6 +2,7 @@ package com.getafe.tienda.negocio;
 
 import java.util.Set;
 
+import com.getafe.tienda.modelo.Fabricante;
 import com.getafe.tienda.modelo.Producto;
 
 public interface Tienda {
@@ -18,4 +19,23 @@ public interface Tienda {
 	 * @return Un Set de productos ordenados
 	 */
 	Set<Producto> getProductos(String descripcion);
+	
+	/**
+	 * Devuelve todos los fabricantes ordenados por su nombre
+	 * @return Set de fabricantes ordenados
+	 */
+	Set<Fabricante> getFabricantes();
+	
+	/**
+	 * Retorna el fabricante buscado
+	 * @param idFabricante id del fabricante
+	 * @return el fabricante si existe, null si no existe
+	 */
+	Fabricante getFabricante(int idFabricante);
+	
+	/**
+	 * Agrega un nuevo producto en la persistencia
+	 * @param p producto a agregar
+	 */
+	void crearProducto(Producto p);
 }

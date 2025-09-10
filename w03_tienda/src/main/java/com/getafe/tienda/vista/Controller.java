@@ -3,6 +3,7 @@ package com.getafe.tienda.vista;
 import java.io.IOException;
 import java.util.Set;
 
+import com.getafe.tienda.modelo.Fabricante;
 import com.getafe.tienda.modelo.Producto;
 import com.getafe.tienda.negocio.Tienda;
 import com.getafe.tienda.negocio.TiendaImpl;
@@ -35,6 +36,8 @@ public class Controller extends HttpServlet {
 			req.getRequestDispatcher("/WEB-INF/vista/listado_productos.jsp").forward(req, resp);
 			break;
 		case "/alta_producto":
+			Set<Fabricante> fabs = neg.getFabricantes();
+			req.setAttribute("fabs", fabs);
 			req.getRequestDispatcher("/WEB-INF/vista/alta_producto.jsp").forward(req, resp);
 			break;
 		}
@@ -59,11 +62,32 @@ public class Controller extends HttpServlet {
 			break;
 		case "/alta_producto":
 			descripcion = req.getParameter("descripcion");
-			String precioStr = req.getParameter("precio");
+			String precioStr = req.getParameter("precio"); //"1589.37"
 			String idFabStr = req.getParameter("idFabricante");
-			System.out.println(descripcion);
-			System.out.println(precioStr);
-			System.out.println(idFabStr);
+			double precio;
+			Fabricante fab;
+			if(!isEmpty(descripcion)
+				&& !isEmpty(precioStr)
+				&& !isEmpty(idFabStr)
+				&& isDouble(precioStr)
+				&& isInteger(idFabStr)
+				&& (precio = Double.parseDouble(precioStr)) > 0
+				&& (fab = neg.getFabricante(Integer.parseInt(idFabStr))) != null) {
+				req.setAttribute("producto", descripcion);
+				try {
+					neg.crearProducto(new Producto(descripcion, precio, fab));
+					req.getRequestDispatcher("/WEB-INF/vista/alta_producto_ok.jsp").forward(req, resp);
+				} catch(Exception e) {
+					req.getRequestDispatcher("/WEB-INF/vista/alta_producto_error.jsp").forward(req, resp);
+				}
+			} else {
+				// cerrar sesión!!!
+				System.out.println(descripcion);
+				System.out.println(precioStr);
+				System.out.println(idFabStr);
+				System.out.println("dio error");
+			}
+			
 			break;
 		}
 	}
@@ -76,5 +100,27 @@ public class Controller extends HttpServlet {
 		
 		app.setAttribute("home", app.getContextPath() + "/tienda");
 		app.setAttribute("css", app.getContextPath() + "/css");
+	}
+	
+	public boolean isEmpty(String param) {
+		return param == null || param.trim().length() == 0;
+	}
+	
+	public boolean isDouble(String num) {
+		try {
+			Double.parseDouble(num);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+	
+	public boolean isInteger(String num) {
+		try {
+			Integer.parseInt(num);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
 	}
 }
