@@ -50,6 +50,13 @@ public class TiendaImpl implements Tienda {
 	}
 	
 	@Override
+	public Set<Fabricante> getFabricantesActivos() {
+		Set<Fabricante> resu = new TreeSet<Fabricante>(getComparatorFabricanteNombre());
+		resu.addAll(fDao.findOnlyActive());
+		return resu;
+	}
+	
+	@Override
 	public void crearProducto(Producto p) {
 		pDao.save(p);
 	}

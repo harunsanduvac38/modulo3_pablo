@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
@@ -16,7 +16,8 @@
 	</header>
 
 	<div id="contPrincipal">
-		<p>El producto <span id="prod">${producto}</span> se ha guardado correctamente</p>
+		<p>El producto <span id="prod">${producto}</span> NO SE HA REGISTRADO</p>
+		<p>El producto existe o ha habido un error</p>
 		<a href="${home}/alta_producto"><button>Mas productos</button></a>
 		<a href="${home}/menu_principal"><button>Volver</button></a>
 	</div>
