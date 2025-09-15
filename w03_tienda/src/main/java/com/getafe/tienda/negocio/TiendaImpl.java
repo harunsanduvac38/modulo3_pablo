@@ -8,19 +8,24 @@ import java.util.TreeSet;
 
 import com.getafe.tienda.modelo.Fabricante;
 import com.getafe.tienda.modelo.Producto;
+import com.getafe.tienda.modelo.Usuario;
 import com.getafe.tienda.persistencia.FabricanteDao;
 import com.getafe.tienda.persistencia.FabricanteDaoImpl;
 import com.getafe.tienda.persistencia.ProductoDao;
 import com.getafe.tienda.persistencia.ProductoDaoImpl;
+import com.getafe.tienda.persistencia.UsuarioDao;
+import com.getafe.tienda.persistencia.UsuarioDaoImpl;
 
 public class TiendaImpl implements Tienda {
 
 	private ProductoDao pDao;
 	private FabricanteDao fDao;
+	private UsuarioDao uDao;
 	
 	public TiendaImpl() {
 		pDao = new ProductoDaoImpl();
 		fDao = new FabricanteDaoImpl();
+		uDao = new UsuarioDaoImpl();
 	}
 	
 	@Override
@@ -88,5 +93,15 @@ public class TiendaImpl implements Tienda {
 	private Comparator<Fabricante> getComparatorFabricanteNombre(){
 		Collator col = Collator.getInstance(new Locale("es"));
 		return (f1,f2) -> col.compare(f1.getFabricante(), f2.getFabricante());		
+	}
+
+	@Override
+	public boolean crearUsuario(Usuario u) {
+		return uDao.save(u);
+	}
+
+	@Override
+	public Usuario validaUsuario(String usr, String pwd) {
+		return uDao.valida(usr, pwd);
 	}
 }
